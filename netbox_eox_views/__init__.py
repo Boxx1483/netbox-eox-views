@@ -7,7 +7,7 @@ class NetBoxEOXViewsConfig(PluginConfig):
     version = "0.1"
     author = "Bo Mikkelsen"
     author_email = "bom@netic.dk"
-    base_url = "netbox_eox_views.urls"
+    base_url = "eox-views"
     urls = "netbox_eox_views.urls"
 
 config = NetBoxEOXViewsConfig
