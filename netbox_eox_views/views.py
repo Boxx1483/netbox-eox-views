@@ -1,20 +1,18 @@
 from datetime import date, datetime
 from dcim.models import Device
-from dcim.tables import DeviceTable
-from utilities.views import ObjectListView
+from netbox.views import generic
+from .tables import LDOSDeviceTable
 
 
-class LDOSDeviceListView(ObjectListView):
-    queryset = Device.objects.exclude(custom_fields__ldos_data__isnull=True)
-    table = DeviceTable
-    template_name = "dcim/device_list.html"  # ✅ use the same template as Devices
-    action_buttons = ("add",)  # shows the + Add button
+class LDOSDeviceListView(generic.ObjectListView):
+    table = LDOSDeviceTable
+    template_name = "dcim/device_list.html"
+    action_buttons = ("add",)
 
     def get_queryset(self):
         today = date.today()
-        devices = super().get_queryset()
+        devices = Device.objects.exclude(custom_fields__ldos_data__isnull=True)
 
-        # Filter devices where ldos_data < today
         filtered_devices = []
         for device in devices:
             ldos_value = device.custom_fields.get("ldos_data")

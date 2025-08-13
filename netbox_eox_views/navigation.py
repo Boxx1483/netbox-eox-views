@@ -1,9 +1,13 @@
-from extras.plugins import PluginMenuItem
+from extras.plugins import PluginMenu, PluginMenuItem
 
-menu_items = (
-    PluginMenuItem(
-        link="plugins:netbox_eox_views:ldos-device-list",
-        link_text="LDOS Devices",
-        buttons=()
-    ),
+menu = PluginMenu(
+    label="EOX Views",
+    groups=(
+        ("Views", (
+            PluginMenuItem(
+                link="plugins:netbox_eox_views:ldos-device-list",
+                link_text="LDOS Devices"
+            ),
+        )),
+    )
 )
