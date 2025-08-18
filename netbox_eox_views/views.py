@@ -9,7 +9,7 @@ class LDOSDeviceListView(generic.ObjectListView):
     template_name = "dcim/device_list.html"
     action_buttons = ("add",)
 
-    def get_queryset(self):
+    def get_queryset(self, request):
         today = date.today()
         devices = Device.objects.exclude(custom_fields__ldos_data__isnull=True)
 
