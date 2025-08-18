@@ -11,11 +11,11 @@ class LDOSDeviceListView(generic.ObjectListView):
 
     def get_queryset(self, request):
         today = date.today()
-        devices = Device.objects.exclude(custom_fields__ldos_data__isnull=True)
+        devices = Device.objects.exclude() # No exclude filter applied, because custom fields cannot be used in the queryset directly. Perhaps put state=production or similar.
 
         filtered_devices = []
         for device in devices:
-            ldos_value = device.custom_fields.get("ldos_data")
+            ldos_value = device.custom_field_data.get("ldos_data")
             if not ldos_value:
                 continue
             try:
