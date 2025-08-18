@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from dcim.models import Device
 from netbox.views import generic
+from django.db.models import Q
 from .tables import LDOSDeviceTable
 
 
@@ -11,9 +12,8 @@ class LDOSDeviceListView(generic.ObjectListView):
 
     def get_queryset(self, request):
         today = date.today()
-        devices = Device.objects.exclude() # No exclude filter applied, because custom fields cannot be used in the queryset directly. Perhaps put state=production or similar.
-
-        filtered_devices = []
+        devices = Device.objects.exclude(custom_field_data__ldos_data__isnull=True)
+        matching_ids = []
         for device in devices:
             ldos_value = device.custom_field_data.get("ldos_data")
             if not ldos_value:
@@ -23,6 +23,7 @@ class LDOSDeviceListView(generic.ObjectListView):
             except (ValueError, TypeError):
                 continue
             if ldos_date < today:
-                filtered_devices.append(device)
+                matching_ids.append(device.id)
 
-        return filtered_devices
+        return Device.objects.filter(id__in=matching_ids)
+
