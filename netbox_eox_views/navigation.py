@@ -8,7 +8,7 @@ menu = PluginMenu(
             PluginMenuItem(
                 link="plugins:netbox_eox_views:ldos-device-list",
                 link_text="LDOS Devices",
-                permissions=["dcim.view_sitre", "dcim.view_device"],
+                permissions=["dcim.view_site", "dcim.view_device"],
             ),
         )),
     )
