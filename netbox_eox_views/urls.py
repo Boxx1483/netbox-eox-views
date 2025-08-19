@@ -4,7 +4,7 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path("", RedirectView.as_view(url="views/", permanent=True)),
-    path("views/", LDOSDeviceListView.as_view(), name="ldos-device-list"),
+    path("ldos-device-list/", LDOSDeviceListView.as_view(), name="ldos-device-list"),
 ]
 
 # urlpatterns = [
