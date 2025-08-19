@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from dcim.models import Device
+from django.db.models import Q
 from netbox.views import generic
 from .tables import LDOSDeviceTable
 
