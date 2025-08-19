@@ -1,7 +1,8 @@
-from extras.plugins import PluginMenu, PluginMenuItem
+from extras.plugins import PluginMenu, PluginMenuItem, PluginMenuButton
 
 menu = PluginMenu(
     label="EOX Views",
+    icon_class="mdi mdi-sitemap"
     groups=(
         ("Views", (
             PluginMenuItem(
