@@ -7,7 +7,7 @@ from .tables import LDOSDeviceTable
 
 class LDOSDeviceListView(generic.ObjectListView):
     table = LDOSDeviceTable
-    template_name = "netbox_eox_views/device_ldos_list.html"
+    template_name = "dcim/device_list.html"
     action_buttons = ("add",)
 
     def get_queryset(self, request):
