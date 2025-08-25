@@ -27,7 +27,7 @@ class LDOSDeviceListView(generic.ObjectListView):
             except (ValueError, TypeError):
                 continue
             if filter_ldos_year:
-                if ldos_date.year == year_from_today:
+                if ldos_date < year_from_today:
                     matching_ids.append(device.id)
             else:
                 if ldos_date < today:
