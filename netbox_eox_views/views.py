@@ -9,13 +9,12 @@ from django.http import HttpResponseRedirect
 
 class LDOSDeviceListView(generic.ObjectListView):
     table = LDOSDeviceTable
-    # template_name = "netbox_eox_views/device_list_ldos.html"
-    template_name = "netbox_eox_views/device_ldos_list.html"
+    template_name = "netbox_eox_views/device_list_ldos.html"
     action_buttons = ("add", "ldos_year")
 
     def get_queryset(self, request):
         today = date.today()
-        year_from_today = today.replace(year=today.year + 1)
+        year_from_today = today.year + 1
         filter_ldos_year = request.GET.get("ldos_year") == "1"
         devices = Device.objects.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
@@ -28,7 +27,7 @@ class LDOSDeviceListView(generic.ObjectListView):
             except (ValueError, TypeError):
                 continue
             if filter_ldos_year:
-                if ldos_date == year_from_today:
+                if ldos_date.year == year_from_today:
                     matching_ids.append(device.id)
             else:
                 if ldos_date < today:
