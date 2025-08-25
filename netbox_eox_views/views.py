@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from datetutil.relativedelta import relativedelta
 from dcim.models import Device
 from django.db.models import Q
 from netbox.views import generic
@@ -14,7 +15,7 @@ class LDOSDeviceListView(generic.ObjectListView):
 
     def get_queryset(self, request):
         today = date.today()
-        year_from_today = today.year + 1
+        year_from_today_date = today + relativedelta(years=1)
         filter_ldos_year = request.GET.get("ldos_year") == "1"
         devices = Device.objects.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
@@ -27,7 +28,7 @@ class LDOSDeviceListView(generic.ObjectListView):
             except (ValueError, TypeError):
                 continue
             if filter_ldos_year:
-                if ldos_date < year_from_today:
+                if ldos_date < year_from_today_date:
                     matching_ids.append(device.id)
             else:
                 if ldos_date < today:
