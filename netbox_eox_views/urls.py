@@ -2,11 +2,9 @@ from django.urls import path
 from .views import LDOSDeviceListView
 from django.views.generic import RedirectView
 
+app_name = "netbox_eox_views"
+
 urlpatterns = [
     path("", RedirectView.as_view(url="views/", permanent=True)),
     path("ldos-device-list/", LDOSDeviceListView.as_view(), name="ldos-device-list"),
 ]
-
-# urlpatterns = [
-#     path("", LDOSDeviceListView.as_view(), name="ldos-device-list"),
-# ]
