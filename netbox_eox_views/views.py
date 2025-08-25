@@ -34,6 +34,11 @@ class LDOSDeviceListView(generic.ObjectListView):
                     matching_ids.append(device.id)
         return Device.objects.filter(id__in=matching_ids)
 
+    def get_extra_context(self, request):
+        return {
+            "today": date.today()
+        }
+
     def ldos_year_button(self, request):
         url = f"{reverse('netbox_eox_views:ldosdevice_list')}?ldos_year=1"
         return HttpResponseRedirect(url)
