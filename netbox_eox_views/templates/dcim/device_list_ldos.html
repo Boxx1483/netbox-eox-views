@@ -1,0 +1,10 @@
+{% extends "dcim/device_list.html" %}
+
+{% block content %}
+  {{ block.super }}
+  <div style="margin-bottom: 1em;">
+    <a href="?ldos_year=1" class="btn btn-primary">
+      Show devices with LDOS date a year from today
+    </a>
+  </div>
+{% endblock %}
