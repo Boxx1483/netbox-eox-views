@@ -12,5 +12,9 @@
       Today
     </a>
   </div>
+  <form method="get" style="display:inline;">
+    <input type="date" name="ldos_before" value="{{ request.GET.ldos_before }}">
+    <button type="submit" class="btn btn-info">Show devices before date</button>
+  </form>
   {{ block.super }}
 {% endblock %}

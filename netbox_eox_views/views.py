@@ -17,6 +17,15 @@ class LDOSDeviceListView(generic.ObjectListView):
         today = date.today()
         year_from_today_date = today + relativedelta(years=1)
         filter_ldos_year = request.GET.get("ldos_year") == "1"
+        ldos_before = request.GET.get("ldos_before")
+        if ldos_before:
+            try:
+                ldos_before_date = datetime.strptime(ldos_before, "%Y-%m-%d").date()
+            except (ValueError, TypeError):
+                ldos_before_date = None
+        else:
+            ldos_before_date = None
+
         devices = Device.objects.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
         for device in devices:
@@ -27,7 +36,10 @@ class LDOSDeviceListView(generic.ObjectListView):
                 ldos_date = datetime.strptime(ldos_value, "%Y-%m-%d").date()
             except (ValueError, TypeError):
                 continue
-            if filter_ldos_year:
+            if ldos_before_date:
+                if ldos_date < ldos_before_date:
+                    matching_ids.append(device.id)
+            elif filter_ldos_year:
                 if ldos_date < year_from_today_date:
                     matching_ids.append(device.id)
             else:
