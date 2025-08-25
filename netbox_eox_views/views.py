@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 
 class LDOSDeviceListView(generic.ObjectListView):
     table = LDOSDeviceTable
-    template_name = "dcim/device_list_ldos.html"  # Updated to use your custom template
+    template_name = "netbox_eox_views/device_list_ldos.html"  # Updated to use your custom template
     action_buttons = ("add", "ldos_year")
 
     def get_queryset(self, request):
