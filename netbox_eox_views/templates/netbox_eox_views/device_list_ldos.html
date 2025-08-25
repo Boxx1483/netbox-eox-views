@@ -3,11 +3,14 @@
 {% block content %}
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1em;">
     <a href="?ldos_year=1" class="btn btn-primary">
-      Devices year a from today
+      Devices a year from today
     </a>
     <div style="flex: 1; text-align: center;">
       <strong>Today: {{ today|date:"Y-m-d" }}</strong>
     </div>
+    <a href="{% url 'netbox_eox_views:ldosdevice_list' %}" class="btn btn-secondary">
+      Today
+    </a>
   </div>
   {{ block.super }}
 {% endblock %}
