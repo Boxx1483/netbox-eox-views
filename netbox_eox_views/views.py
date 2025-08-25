@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from datetutil.relativedelta import relativedelta
+from dateutil.relativedelta import relativedelta
 from dcim.models import Device
 from django.db.models import Q
 from netbox.views import generic
