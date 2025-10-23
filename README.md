@@ -37,6 +37,7 @@ It provides custom views and navigation for tracking device lifecycle status wit
 
 - Access the EoX device list at `/plugins/netbox_eox_views/ldos-device-list/`
 - The plugin adds navigation entries and custom views for device lifecycle management.
+- TIH stuff http://0.0.0.0:8000/plugins/
 
 ## File Structure
 
