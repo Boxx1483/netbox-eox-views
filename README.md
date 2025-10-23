@@ -1,5 +1,5 @@
 # netbox-eox-views
-
+hh
 **netbox-eox-views** is a NetBox 4.x plugin for managing and displaying End-of-Life (EoX) information for devices.  
 It provides custom views and navigation for tracking device lifecycle status within NetBox.
 
