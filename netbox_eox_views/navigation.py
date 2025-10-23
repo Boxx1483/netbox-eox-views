@@ -10,6 +10,11 @@ menu = PluginMenu(
                 link_text="LDOS Devices",
                 permissions=["dcim.view_site", "dcim.view_device"],
             ),
+            PluginMenuItem(
+                link="plugins:netbox_eox_views:expired-license-device-list",
+                link_text="Expired License Devices",
+                permissions=["dcim.view_site", "dcim.view_device"],
+            ),
         )),
     )
 )

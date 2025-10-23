@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 from dcim.models import Device
 from django.db.models import Q
 from netbox.views import generic
-from .tables import LDOSDeviceTable
+from .tables import LDOSDeviceTable, ExpiredLicenseDeviceTable
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
@@ -55,4 +55,26 @@ class LDOSDeviceListView(generic.ObjectListView):
     def ldos_year_button(self, request):
         url = f"{reverse('netbox_eox_views:ldosdevice_list')}?ldos_year=1"
         return HttpResponseRedirect(url)
+
+
+class ExpiredLicenseDeviceListView(generic.ObjectListView):
+    table = ExpiredLicenseDeviceTable
+    template_name = "netbox_eox_views/device_list_ldos.html" 
+    action_buttons = ("add",)
+
+    def get_queryset(self, request):
+        devices = Device.objects.filter(Q(status="active") | Q(status="production"))
+        matching_ids = []
+        
+        for device in devices:
+            service_contract_status = device.custom_field_data.get("service_contract_status")
+            if service_contract_status == "Expired":
+                matching_ids.append(device.id)
+                
+        return Device.objects.filter(id__in=matching_ids)
+
+    def get_extra_context(self, request):
+        return {
+            "today": date.today()
+        }
 

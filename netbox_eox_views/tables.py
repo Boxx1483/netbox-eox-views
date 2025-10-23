@@ -9,3 +9,17 @@ class LDOSDeviceTable(DeviceTable):
 
     class Meta(DeviceTable.Meta):
         fields = DeviceTable.Meta.fields + ("ldos_data",)
+
+
+class ExpiredLicenseDeviceTable(DeviceTable):
+    service_contract_end = tables.Column(
+        verbose_name="Service Contract End",
+        accessor="custom_field_data.Service Contract End"
+    )
+    service_contract_status = tables.Column(
+        verbose_name="Service Contract Status",
+        accessor="custom_field_data.service_contract_status"
+    )
+
+    class Meta(DeviceTable.Meta):
+        fields = DeviceTable.Meta.fields + ("service_contract_end", "service_contract_status")
