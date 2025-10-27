@@ -15,18 +15,17 @@
     </a>
   </div>
 
-  <form method="get" class="d-flex align-items-center gap-2 mb-3">
-    <label for="ldos_before" class="me-2 fw-semibold">Show devices expiring before:</label>
+  <form method="get" class="d-flex justify-content-start align-items-center mb-4" style="gap: 0.5rem;">
+    <span class="fw-semibold">Show devices expiring before:</span>
     <input
       type="date"
-      id="ldos_before"
       name="ldos_before"
       value="{{ request.GET.ldos_before }}"
       class="form-control"
-      style="max-width: 200px;"
+      style="max-width: 220px;"
     >
     <button type="submit" class="btn btn-success">
-      Filter
+      Search
     </button>
   </form>
 
