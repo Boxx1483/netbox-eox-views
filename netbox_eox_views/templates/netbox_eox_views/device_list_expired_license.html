@@ -2,12 +2,12 @@
 
 {% block content %}
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <a href="?ldos_year=1" class="btn btn-primary">
+    <a href="?expiry_year=1" class="btn btn-outline-primary">
       Devices expiring within 1 year
     </a>
 
     <div class="text-center flex-fill">
-      <strong>Today’s Date: {{ today|date:"Y-m-d" }}</strong>
+      <strong>Today's Date: {{ today|date:"Y-m-d" }}</strong>
     </div>
 
     <a href="/plugins/netbox_eox_views/expired-license-device-list/" class="btn btn-outline-danger">
@@ -15,16 +15,17 @@
     </a>
   </div>
 
-  <form method="get" class="d-flex justify-content-start align-items-center mb-4" style="gap: 0.5rem;">
-    <span class="fw-semibold">Show devices expiring before:</span>
+  <form method="get" class="d-flex align-items-center mb-4" style="gap: 0.5rem; flex-wrap: wrap;">
+    <label for="expiry_before" class="fw-semibold mb-0">Show devices expiring before:</label>
     <input
       type="date"
-      name="ldos_before"
-      value="{{ request.GET.ldos_before }}"
+      id="expiry_before"
+      name="expiry_before"
+      value="{{ request.GET.expiry_before }}"
       class="form-control"
-      style="max-width: 220px;"
+      style="max-width: 200px;"
     >
-    <button type="submit" class="btn btn-success">
+    <button type="submit" class="btn btn-primary">
       Search
     </button>
   </form>
