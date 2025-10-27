@@ -1,20 +1,38 @@
 {% extends "generic/object_list.html" %}
 
 {% block content %}
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1em;">
-    <a href="?ldos_year=1" class="btn btn-primary">
-      Devices a year from today
-    </a>
-    <div style="flex: 1; text-align: center;">
-      <strong>Today: {{ today|date:"Y-m-d" }}</strong>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex" style="gap: 0.5rem;">
+      <a href="?ldos_year=1" class="btn btn-outline-primary">
+        Devices a year from today
+      </a>
+      <a href="/plugins/netbox_eox_views/ldos-device-list/" class="btn btn-outline-danger">
+        Today
+      </a>
     </div>
-    <a href="/plugins/netbox_eox_views/ldos-device-list/" class="btn btn-secondary">
-      Today
-    </a>
+
+    <div class="text-center flex-fill text-end">
+      <h4 class="mb-0">LDOS Devices</h4>
+      <small class="text-muted">Last Updated: {{ today|date:"Y-m-d" }}</small>
+    </div>
   </div>
-  <form method="get" style="display:inline;">
-    <input type="date" name="ldos_before" value="{{ request.GET.ldos_before }}">
-    <button type="submit" class="btn btn-info">Show devices before date</button>
+
+  <form method="get" class="mb-4">
+    <label for="ldos_before" class="fw-semibold mb-2 d-block">Show devices before date:</label>
+    <div class="d-flex align-items-center" style="gap: 0.5rem; flex-wrap: wrap;">
+      <input
+        type="date"
+        id="ldos_before"
+        name="ldos_before"
+        value="{{ request.GET.ldos_before }}"
+        class="form-control"
+        style="max-width: 200px;"
+      >
+      <button type="submit" class="btn btn-success text-white fw-bold" style="padding-left: 1.2rem; padding-right: 1.2rem;">
+        Search
+      </button>
+    </div>
   </form>
+
   {{ block.super }}
 {% endblock %}
