@@ -59,7 +59,7 @@ class LDOSDeviceListView(generic.ObjectListView):
 
 class ExpiredLicenseDeviceListView(generic.ObjectListView):
     table = ExpiredLicenseDeviceTable
-    template_name = "netbox_eox_views/device_list_ldos.html" 
+    template_name = "netbox_eox_views/device_list_expired_license.html"
     action_buttons = ("add", "ldos_year")
 
     def get_queryset(self, request):
