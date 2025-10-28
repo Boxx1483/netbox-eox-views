@@ -163,6 +163,7 @@ class EOSVDeviceListView(generic.ObjectListView):
 
 
 class MissingEoxDataDeviceListView(generic.ObjectListView):
+    queryset = Device.objects.all()
     table = MissingDataDeviceTable
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
@@ -230,6 +231,7 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
 
 
 class MissingContractDeviceListView(generic.ObjectListView):
+    queryset = Device.objects.all()
     table = MissingDataDeviceTable
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
