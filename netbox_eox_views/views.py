@@ -79,6 +79,12 @@ class ExpiredLicenseDeviceListView(generic.ObjectListView):
         matching_ids = []
         for device in devices:
             service_contract_end = device.custom_field_data.get("Service Contract End")
+            service_contract_status = device.custom_field_data.get("service_contract_status")
+            
+            if service_contract_status == "Expired":
+                matching_ids.append(device.id)
+                continue
+            
             if not service_contract_end:
                 continue
             try:
@@ -169,22 +175,29 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
         for device in devices:
             if missing_field == "eos":
                 has_data = device.custom_field_data.get("eos_data")
+                if not has_data:
+                    matching_ids.append(device.id)
             elif missing_field == "eosr":
                 has_data = device.custom_field_data.get("eosr_data")
+                if not has_data:
+                    matching_ids.append(device.id)
             elif missing_field == "eosv":
                 has_data = device.custom_field_data.get("eosv_data")
+                if not has_data:
+                    matching_ids.append(device.id)
             elif missing_field == "ldos":
                 has_data = device.custom_field_data.get("ldos_data")
+                if not has_data:
+                    matching_ids.append(device.id)
             else:
-                # Check all EOX fields if no specific filter
-                has_eos_data = device.custom_field_data.get("eos_data")
-                has_eosr_data = device.custom_field_data.get("eosr_data")
-                has_eosv_data = device.custom_field_data.get("eosv_data")
-                has_ldos_data = device.custom_field_data.get("ldos_data")
-                has_data = not (has_eos_data and has_eosr_data and has_eosv_data and has_ldos_data)
-            
-            if not has_data:
-                matching_ids.append(device.id)
+                # Show devices where ALL EOX fields are null
+                eos_data = device.custom_field_data.get("eos_data")
+                eosr_data = device.custom_field_data.get("eosr_data")
+                eosv_data = device.custom_field_data.get("eosv_data")
+                ldos_data = device.custom_field_data.get("ldos_data")
+                
+                if not eos_data and not eosr_data and not eosv_data and not ldos_data:
+                    matching_ids.append(device.id)
                 
         return Device.objects.filter(id__in=matching_ids)
 
@@ -198,10 +211,19 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
         }
         title = f"Devices with Missing {field_names.get(missing_field, 'EOX Data')}"
         
+        # Define filter options for the tabs
+        filter_options = [
+            ("eos", "Missing EOS"),
+            ("eosr", "Missing EOSR"),
+            ("eosv", "Missing EOSV"),
+            ("ldos", "Missing LDOS")
+        ]
+        
         return {
             "today": date.today(),
             "view_title": title,
-            "current_filter": missing_field
+            "current_filter": missing_field,
+            "filter_options": filter_options
         }
 
 
@@ -240,9 +262,16 @@ class MissingContractDeviceListView(generic.ObjectListView):
         }
         title = f"Devices with Missing {field_names.get(missing_field, 'Support Contract Data')}"
         
+        # Define filter options for the tabs
+        filter_options = [
+            ("end_date", "Missing End Date"),
+            ("status", "Missing Status")
+        ]
+        
         return {
             "today": date.today(),
             "view_title": title,
-            "current_filter": missing_field
+            "current_filter": missing_field,
+            "filter_options": filter_options
         }
 

@@ -6,6 +6,19 @@
     <small class="text-muted">Last Updated: {{ today|date:"Y-m-d" }}</small>
   </div>
 
+  {% if filter_options %}
+  <div class="btn-group mb-3" role="group" aria-label="Filter options">
+    <a href="." class="btn btn-sm {% if not current_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">
+      All
+    </a>
+    {% for filter_key, filter_label in filter_options %}
+    <a href="?missing_field={{ filter_key }}" class="btn btn-sm {% if current_filter == filter_key %}btn-primary{% else %}btn-outline-primary{% endif %}">
+      {{ filter_label }}
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   {{ block.super }}
 {% endblock %}
 
