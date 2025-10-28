@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 from dcim.models import Device
 from django.db.models import Q
 from netbox.views import generic
-from .tables import LDOSDeviceTable, ExpiredLicenseDeviceTable, EOSVDeviceTable
+from .tables import LDOSDeviceTable, ExpiredLicenseDeviceTable, EOSVDeviceTable, MissingDataDeviceTable
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
@@ -153,4 +153,54 @@ class EOSVDeviceListView(generic.ObjectListView):
     def ldos_year_button(self, request):
         url = f"{reverse('netbox_eox_views:eosv_device_list')}?ldos_year=1"
         return HttpResponseRedirect(url)
+
+
+class MissingEoxDataDeviceListView(generic.ObjectListView):
+    table = MissingDataDeviceTable
+    template_name = "netbox_eox_views/device_list_ldos.html"
+    action_buttons = ("add",)
+
+    def get_queryset(self, request):
+        devices = Device.objects.filter(Q(status="active") | Q(status="production"))
+        matching_ids = []
+        
+        for device in devices:
+            has_eos_data = device.custom_field_data.get("eos_data")
+            has_eosr_data = device.custom_field_data.get("eosr_data")
+            has_eosv_data = device.custom_field_data.get("eosv_data")
+            has_ldos_data = device.custom_field_data.get("ldos_data")
+            
+            if not has_eos_data or not has_eosr_data or not has_eosv_data or not has_ldos_data:
+                matching_ids.append(device.id)
+                
+        return Device.objects.filter(id__in=matching_ids)
+
+    def get_extra_context(self, request):
+        return {
+            "today": date.today()
+        }
+
+
+class MissingContractDeviceListView(generic.ObjectListView):
+    table = MissingDataDeviceTable
+    template_name = "netbox_eox_views/device_list_ldos.html"
+    action_buttons = ("add",)
+
+    def get_queryset(self, request):
+        devices = Device.objects.filter(Q(status="active") | Q(status="production"))
+        matching_ids = []
+        
+        for device in devices:
+            has_contract_end = device.custom_field_data.get("Service Contract End")
+            has_contract_status = device.custom_field_data.get("service_contract_status")
+            
+            if not has_contract_end or not has_contract_status:
+                matching_ids.append(device.id)
+                
+        return Device.objects.filter(id__in=matching_ids)
+
+    def get_extra_context(self, request):
+        return {
+            "today": date.today()
+        }
 

@@ -25,12 +25,12 @@ menu = PluginMenu(
         )),
         ("MISSING DATA", (
             PluginMenuItem(
-                link="plugins:netbox_eox_views:missing-data-device-list",
+                link="plugins:netbox_eox_views:missing-eox-data-device-list",
                 link_text="Devices with Missing EOX Data",
                 permissions=["dcim.view_site", "dcim.view_device"],
             ),
             PluginMenuItem(
-                link="plugins:netbox_eox_views:missing-data-device-list",
+                link="plugins:netbox_eox_views:missing-contract-device-list",
                 link_text="Devices with Missing Support Contracts",
                 permissions=["dcim.view_site", "dcim.view_device"],
             ),
