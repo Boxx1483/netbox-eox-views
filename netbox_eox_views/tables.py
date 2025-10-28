@@ -23,3 +23,13 @@ class ExpiredLicenseDeviceTable(DeviceTable):
 
     class Meta(DeviceTable.Meta):
         fields = DeviceTable.Meta.fields + ("service_contract_end", "service_contract_status")
+
+
+class EOSVDeviceTable(DeviceTable):
+    eosv_data = tables.Column(
+        verbose_name="EOSV Date",
+        accessor="custom_field_data.eosv_data"
+    )
+
+    class Meta(DeviceTable.Meta):
+        fields = DeviceTable.Meta.fields + ("eosv_data",)
