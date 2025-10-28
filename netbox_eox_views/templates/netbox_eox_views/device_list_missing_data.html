@@ -1,0 +1,11 @@
+{% extends "generic/object_list.html" %}
+
+{% block content %}
+  <div class="mb-3">
+    <h4 class="mb-1">{{ view_title|default:"Missing Data Devices" }}</h4>
+    <small class="text-muted">Last Updated: {{ today|date:"Y-m-d" }}</small>
+  </div>
+
+  {{ block.super }}
+{% endblock %}
+

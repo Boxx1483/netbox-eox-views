@@ -4,15 +4,15 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div class="d-flex" style="gap: 0.5rem;">
       <a href="?ldos_year=1" class="btn btn-outline-primary">
-        Devices a year from today
+        Devices expiring within 1 year
       </a>
       <a href="/plugins/netbox_eox_views/ldos-device-list/" class="btn btn-outline-danger">
-        Today
+        Show expired devices
       </a>
     </div>
 
     <div class="text-center flex-fill text-end">
-      <h4 class="mb-0">LDOS Devices</h4>
+      <h4 class="mb-0">End-of-Life Devices</h4>
       <small class="text-muted">Last Updated: {{ today|date:"Y-m-d" }}</small>
     </div>
   </div>

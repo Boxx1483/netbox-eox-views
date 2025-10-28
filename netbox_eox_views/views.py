@@ -108,7 +108,7 @@ class ExpiredLicenseDeviceListView(generic.ObjectListView):
 
 class EOSVDeviceListView(generic.ObjectListView):
     table = EOSVDeviceTable
-    template_name = "netbox_eox_views/device_list_ldos.html"  # Using same template for now
+    template_name = "netbox_eox_views/device_list_ldos.html"
     action_buttons = ("add", "ldos_year")
 
     def get_queryset(self, request):
@@ -157,50 +157,92 @@ class EOSVDeviceListView(generic.ObjectListView):
 
 class MissingEoxDataDeviceListView(generic.ObjectListView):
     table = MissingDataDeviceTable
-    template_name = "netbox_eox_views/device_list_ldos.html"
-    action_buttons = ("add",)
+    template_name = "netbox_eox_views/device_list_missing_data.html"
+    action_buttons = ("add", "export")
 
     def get_queryset(self, request):
         devices = Device.objects.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
         
+        missing_field = request.GET.get("missing_field", "")
+        
         for device in devices:
-            has_eos_data = device.custom_field_data.get("eos_data")
-            has_eosr_data = device.custom_field_data.get("eosr_data")
-            has_eosv_data = device.custom_field_data.get("eosv_data")
-            has_ldos_data = device.custom_field_data.get("ldos_data")
+            if missing_field == "eos":
+                has_data = device.custom_field_data.get("eos_data")
+            elif missing_field == "eosr":
+                has_data = device.custom_field_data.get("eosr_data")
+            elif missing_field == "eosv":
+                has_data = device.custom_field_data.get("eosv_data")
+            elif missing_field == "ldos":
+                has_data = device.custom_field_data.get("ldos_data")
+            else:
+                # Check all EOX fields if no specific filter
+                has_eos_data = device.custom_field_data.get("eos_data")
+                has_eosr_data = device.custom_field_data.get("eosr_data")
+                has_eosv_data = device.custom_field_data.get("eosv_data")
+                has_ldos_data = device.custom_field_data.get("ldos_data")
+                has_data = not (has_eos_data and has_eosr_data and has_eosv_data and has_ldos_data)
             
-            if not has_eos_data or not has_eosr_data or not has_eosv_data or not has_ldos_data:
+            if not has_data:
                 matching_ids.append(device.id)
                 
         return Device.objects.filter(id__in=matching_ids)
 
     def get_extra_context(self, request):
+        missing_field = request.GET.get("missing_field", "")
+        field_names = {
+            "eos": "EOS Data",
+            "eosr": "EOSR Data",
+            "eosv": "EOSV Data",
+            "ldos": "LDOS Data"
+        }
+        title = f"Devices with Missing {field_names.get(missing_field, 'EOX Data')}"
+        
         return {
-            "today": date.today()
+            "today": date.today(),
+            "view_title": title,
+            "current_filter": missing_field
         }
 
 
 class MissingContractDeviceListView(generic.ObjectListView):
     table = MissingDataDeviceTable
-    template_name = "netbox_eox_views/device_list_ldos.html"
-    action_buttons = ("add",)
+    template_name = "netbox_eox_views/device_list_missing_data.html"
+    action_buttons = ("add", "export")
 
     def get_queryset(self, request):
         devices = Device.objects.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
         
+
+        missing_field = request.GET.get("missing_field", "")
+        
         for device in devices:
-            has_contract_end = device.custom_field_data.get("Service Contract End")
-            has_contract_status = device.custom_field_data.get("service_contract_status")
+            if missing_field == "end_date":
+                has_data = device.custom_field_data.get("Service Contract End")
+            elif missing_field == "status":
+                has_data = device.custom_field_data.get("service_contract_status")
+            else:
+                has_contract_end = device.custom_field_data.get("Service Contract End")
+                has_contract_status = device.custom_field_data.get("service_contract_status")
+                has_data = not (has_contract_end and has_contract_status)
             
-            if not has_contract_end or not has_contract_status:
+            if not has_data:
                 matching_ids.append(device.id)
                 
         return Device.objects.filter(id__in=matching_ids)
 
     def get_extra_context(self, request):
+        missing_field = request.GET.get("missing_field", "")
+        field_names = {
+            "end_date": "Contract End Date",
+            "status": "Contract Status"
+        }
+        title = f"Devices with Missing {field_names.get(missing_field, 'Support Contract Data')}"
+        
         return {
-            "today": date.today()
+            "today": date.today(),
+            "view_title": title,
+            "current_filter": missing_field
         }
 
