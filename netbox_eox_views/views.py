@@ -6,6 +6,7 @@ from netbox.views import generic
 from .tables import LDOSDeviceTable, ExpiredLicenseDeviceTable, EOSVDeviceTable, MissingDataDeviceTable
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from dcim.filtersets import DeviceFilterSet
 
 
 class LDOSDeviceListView(generic.ObjectListView):
@@ -165,9 +166,12 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
     table = MissingDataDeviceTable
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
-
+    filterset = DeviceFilterSet
+    
     def get_queryset(self, request):
-        devices = Device.objects.filter(Q(status="active") | Q(status="production"))
+        base_queryset = super().get_queryset(request)
+        
+        devices = base_queryset.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
         
         missing_field = request.GET.get("missing_field", "")
@@ -190,7 +194,6 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
                 if not has_data:
                     matching_ids.append(device.id)
             else:
-                # Show devices where ALL EOX fields are null
                 eos_data = device.custom_field_data.get("eos_data")
                 eosr_data = device.custom_field_data.get("eosr_data")
                 eosv_data = device.custom_field_data.get("eosv_data")
@@ -211,7 +214,6 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
         }
         title = f"Devices with Missing {field_names.get(missing_field, 'EOX Data')}"
         
-        # Define filter options for the tabs
         filter_options = [
             ("eos", "Missing EOS"),
             ("eosr", "Missing EOSR"),
@@ -231,12 +233,14 @@ class MissingContractDeviceListView(generic.ObjectListView):
     table = MissingDataDeviceTable
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
+    filterset = DeviceFilterSet
 
     def get_queryset(self, request):
-        devices = Device.objects.filter(Q(status="active") | Q(status="production"))
+        base_queryset = super().get_queryset(request)
+        
+        devices = base_queryset.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
         
-
         missing_field = request.GET.get("missing_field", "")
         
         for device in devices:
@@ -262,7 +266,6 @@ class MissingContractDeviceListView(generic.ObjectListView):
         }
         title = f"Devices with Missing {field_names.get(missing_field, 'Support Contract Data')}"
         
-        # Define filter options for the tabs
         filter_options = [
             ("end_date", "Missing End Date"),
             ("status", "Missing Status")
