@@ -6,12 +6,6 @@ from netbox.views import generic
 from .tables import LDOSDeviceTable, ExpiredLicenseDeviceTable, EOSVDeviceTable, MissingDataDeviceTable
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from dcim.filtersets import DeviceFilterSet
-# Filter form temporarily disabled - uncomment when ready to use
-# try:
-#     from .forms import MissingDataDeviceFilterForm
-# except ImportError:
-#     MissingDataDeviceFilterForm = None
 
 
 class LDOSDeviceListView(generic.ObjectListView):
@@ -172,15 +166,9 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
     table = MissingDataDeviceTable
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
-    filterset = DeviceFilterSet
-    # filterset_form - temporarily disabled to fix container startup
-    # Will be enabled once we verify the import works in your NetBox version
     
     def get_queryset(self, request):
-        # Let the parent apply filterset filters first
-        base_queryset = super().get_queryset(request)
-        
-        devices = base_queryset.filter(Q(status="active") | Q(status="production"))
+        devices = Device.objects.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
         
         missing_field = request.GET.get("missing_field", "")
@@ -243,14 +231,9 @@ class MissingContractDeviceListView(generic.ObjectListView):
     table = MissingDataDeviceTable
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
-    filterset = DeviceFilterSet
-    # filterset_form - temporarily disabled to fix container startup
-    # Will be enabled once we verify the import works in your NetBox version
 
     def get_queryset(self, request):
-        base_queryset = super().get_queryset(request)
-        
-        devices = base_queryset.filter(Q(status="active") | Q(status="production"))
+        devices = Device.objects.filter(Q(status="active") | Q(status="production"))
         matching_ids = []
         
         missing_field = request.GET.get("missing_field", "")
