@@ -7,6 +7,7 @@ from .tables import LDOSDeviceTable, ExpiredLicenseDeviceTable, EOSVDeviceTable,
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from dcim.filtersets import DeviceFilterSet
+from .forms import MissingDataDeviceFilterForm
 
 
 class LDOSDeviceListView(generic.ObjectListView):
@@ -168,6 +169,7 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
     filterset = DeviceFilterSet
+    filterset_form = MissingDataDeviceFilterForm
     
     def get_queryset(self, request):
         # Let the parent apply filterset filters first
@@ -237,6 +239,7 @@ class MissingContractDeviceListView(generic.ObjectListView):
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
     filterset = DeviceFilterSet
+    filterset_form = MissingDataDeviceFilterForm
 
     def get_queryset(self, request):
         base_queryset = super().get_queryset(request)
