@@ -168,9 +168,9 @@ class MissingEoxDataDeviceListView(generic.ObjectListView):
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
     filterset = DeviceFilterSet
-    use_new_ui = True
     
     def get_queryset(self, request):
+        # Let the parent apply filterset filters first
         base_queryset = super().get_queryset(request)
         
         devices = base_queryset.filter(Q(status="active") | Q(status="production"))
@@ -237,7 +237,6 @@ class MissingContractDeviceListView(generic.ObjectListView):
     template_name = "netbox_eox_views/device_list_missing_data.html"
     action_buttons = ("add", "export")
     filterset = DeviceFilterSet
-    use_new_ui = True
 
     def get_queryset(self, request):
         base_queryset = super().get_queryset(request)
