@@ -249,15 +249,34 @@ class MissingContractDeviceListView(generic.ObjectListView):
         for device in devices:
             if missing_field == "end_date":
                 has_data = device.custom_field_data.get("Service Contract End")
+                if not has_data:
+                    matching_ids.append(device.id)
             elif missing_field == "status":
                 has_data = device.custom_field_data.get("service_contract_status")
+                if not has_data:
+                    matching_ids.append(device.id)
+            elif missing_field == "contract_number":
+                has_data = device.custom_field_data.get("Service Contract Number")
+                if not has_data:
+                    matching_ids.append(device.id)
+            elif missing_field == "service_level":
+                has_data = device.custom_field_data.get("Service Contract Service Level")
+                if not has_data:
+                    matching_ids.append(device.id)
+            elif missing_field == "contract_start":
+                has_data = device.custom_field_data.get("Service Contract Start")
+                if not has_data:
+                    matching_ids.append(device.id)
             else:
-                has_contract_end = device.custom_field_data.get("Service Contract End")
-                has_contract_status = device.custom_field_data.get("service_contract_status")
-                has_data = not (has_contract_end and has_contract_status)
-            
-            if not has_data:
-                matching_ids.append(device.id)
+                contract_end = device.custom_field_data.get("Service Contract End")
+                contract_status = device.custom_field_data.get("service_contract_status")
+                contract_number = device.custom_field_data.get("Service Contract Number")
+                contract_service_level = device.custom_field_data.get("Service Contract Service Level")
+                contract_start = device.custom_field_data.get("Service Contract Start")
+                
+                if (not contract_end and not contract_status and not contract_number 
+                    and not contract_service_level and not contract_start):
+                    matching_ids.append(device.id)
                 
         return Device.objects.filter(id__in=matching_ids)
 
@@ -265,13 +284,19 @@ class MissingContractDeviceListView(generic.ObjectListView):
         missing_field = request.GET.get("missing_field", "")
         field_names = {
             "end_date": "Contract End Date",
-            "status": "Contract Status"
+            "status": "Contract Status",
+            "contract_number": "Contract Number",
+            "service_level": "Contract Service Level",
+            "contract_start": "Contract Start Date"
         }
         title = f"Devices with Missing {field_names.get(missing_field, 'Support Contract Data')}"
         
         filter_options = [
             ("end_date", "Missing End Date"),
-            ("status", "Missing Status")
+            ("status", "Missing Status"),
+            ("contract_number", "Missing Contract Number"),
+            ("service_level", "Missing Service Level"),
+            ("contract_start", "Missing Start Date")
         ]
         
         return {
