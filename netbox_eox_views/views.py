@@ -7,10 +7,11 @@ from .tables import LDOSDeviceTable, ExpiredLicenseDeviceTable, EOSVDeviceTable,
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from dcim.filtersets import DeviceFilterSet
-try:
-    from .forms import MissingDataDeviceFilterForm
-except ImportError:
-    MissingDataDeviceFilterForm = None
+# Filter form temporarily disabled - uncomment when ready to use
+# try:
+#     from .forms import MissingDataDeviceFilterForm
+# except ImportError:
+#     MissingDataDeviceFilterForm = None
 
 
 class LDOSDeviceListView(generic.ObjectListView):
