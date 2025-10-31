@@ -2,27 +2,27 @@
 
 {% block content %}
   <div class="mb-3">
-    <h4 class="mb-1">End-of-Life Devices</h4>
+    <h4 class="mb-1">Expired Support Contracts</h4>
     <small class="text-muted">Last Updated: {{ today|date:"Y-m-d" }}</small>
   </div>
 
   <div class="btn-group mb-3" role="group" aria-label="Filter options">
-    <a href="/plugins/netbox_eox_views/ldos-device-list/" class="btn btn-sm btn-outline-primary">
-      Show expired devices
+    <a href="/plugins/netbox_eox_views/expired-license-device-list/" class="btn btn-sm btn-outline-primary">
+      Show expired Contracts
     </a>
-    <a href="?ldos_year=1" class="btn btn-sm btn-outline-primary">
-      Devices expiring within 1 year
+    <a href="?expiry_year=1" class="btn btn-sm btn-outline-primary">
+      Contracts expiring within 1 year
     </a>
   </div>
 
   <form method="get" class="mb-4">
-    <label for="ldos_before" class="fw-semibold mb-2 d-block">Show devices before date:</label>
+    <label for="expiry_before" class="fw-semibold mb-2 d-block">Show contracts expiring before:</label>
     <div class="d-flex align-items-center" style="gap: 0.5rem; flex-wrap: wrap;">
       <input
         type="date"
-        id="ldos_before"
-        name="ldos_before"
-        value="{{ request.GET.ldos_before }}"
+        id="expiry_before"
+        name="expiry_before"
+        value="{{ request.GET.expiry_before }}"
         class="form-control"
         style="max-width: 200px;"
       >
